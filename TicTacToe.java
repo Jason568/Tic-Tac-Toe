@@ -3,12 +3,10 @@ import java.util.Scanner;
 public class TicTacToe {
     private char[][] board;
     private char currentPlayer;
-    private boolean gameEnded;
 
     public TicTacToe() {
         board = new char[3][3];
         currentPlayer = 'X';
-        gameEnded = false;
         initializeBoard();
     }
 
@@ -66,7 +64,7 @@ public class TicTacToe {
     }
 
     private boolean checkDiagonals() {
-        return (checkRowCol(board[0][0], board[1][1], board[2][2]) || 
+        return (checkRowCol(board[0][0], board[1][1], board[2][2]) ||
                 checkRowCol(board[0][2], board[1][1], board[2][0]));
     }
 
@@ -88,13 +86,10 @@ public class TicTacToe {
         return false;
     }
 
-    public void playGame() {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("Welcome to Tic Tac Toe!");
+    public void playGame(Scanner scanner) {
         System.out.println("Enter row and column numbers (0-2) separated by space:");
 
-        while (!gameEnded) {
+        while (true) {
             printBoard();
             System.out.println("Player " + currentPlayer + "'s turn:");
 
@@ -106,11 +101,11 @@ public class TicTacToe {
                     if (checkForWin()) {
                         printBoard();
                         System.out.println("Player " + currentPlayer + " wins!");
-                        gameEnded = true;
+                        break;
                     } else if (isBoardFull()) {
                         printBoard();
                         System.out.println("It's a tie!");
-                        gameEnded = true;
+                        break;
                     } else {
                         changePlayer();
                     }
@@ -122,11 +117,26 @@ public class TicTacToe {
                 scanner.nextLine();
             }
         }
-        scanner.close();
     }
 
     public static void main(String[] args) {
-        TicTacToe game = new TicTacToe();
-        game.playGame();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Tic Tac Toe!");
+
+        while (true) {
+            TicTacToe game = new TicTacToe();
+            game.playGame(scanner);
+
+            System.out.print("\nPlay again? (y/n): ");
+            String response = scanner.next().trim().toLowerCase();
+            if (!response.equals("y")) {
+                break;
+            }
+            System.out.println();
+        }
+
+        scanner.close();
+        System.out.println("Thanks for playing!");
     }
 }
